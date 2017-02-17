@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ajax</title>
+</head>
+<body>
+    <ul id="content"></ul>
+</body>
+<script>
+
+        const xhr = new XMLHttpRequest();
+
+        xhr.open("GET",'boos.json');
+        xhr.responseType = 'json';
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // 获取所有的响应头
+                console.log(xhr.getAllResponseHeaders());
+                // 获取指定的响应头
+                console.log(xhr.getResponseHeader('Content-Type'));
+                // 获取响应体以及响应状态码描述
+                // console.log(xhr.responseText,xhr.statusText);
+                // 输出响应体，响应体的类型由responseType决定
+                console.log(xhr.response);
+                const content = document.querySelector('#content');
+                const books = xhr.response;
+                for (let i = 0; i < books.length; i++) {
+                   const li =  document.createElement(li);
+                   li.innerHTML = books[i].name;
+                   content.appendChild(li);
+                }
+
+            }
+        };
+
+        xhr.send();
+
+
+</script>
+</html>
