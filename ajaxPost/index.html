@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ajax</title>
+</head>
+<body>
+<form action="" name="userform">
+    用户<input type="text" name="username">
+    密码<input type="text" name="password">
+    <input type="button" id="regBtn">注册</input>
+<!--
+    <input type="submit" value="注册">
+-->
+</form>
+</body>
+<script>
+    function serialize(from) {
+       // 把表单中的元素集合转化成数组
+       let elements = [].slice.call(from.elements);
+       
+       // 循环这个数组
+       var data = [];
+        
+       elements.forEach((element) => {
+           let type = element.type;
+
+           switch(type){
+               case 'text':
+                   data.push(element.name+'='+element.value)
+           }
+
+       });
+        return data.join('&');
+    }
+
+    window.onload = () => {
+        document.querySelector('#regBtn').addEventListener('click',() => {
+
+            const xhr = new XMLHttpRequest();
+
+            xhr.open("POST",'/reg',true);
+            xhr.responseType = 'json';
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+
+
+                }
+            };
+
+            // 把表单的值 转成字符串
+            let data = serialize(document.querySelector('form'));
+            console.log(data);
+            // 把数据放在请求体里发送给服务器
+            xhr.send(data);
+        })
+    };
+
+
+
+</script>
+</html>
