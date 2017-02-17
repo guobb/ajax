@@ -20,19 +20,22 @@ http.createServer((req,res) => {
     let pathname = urlObj.pathname;
 
     if (pathname == '/') {
+        // 读取文件内容
         fs.readFile('./index.html', 'utf8', (err, data) => {
             res.end(data);
         })
     } else if (pathname == '/reg') {
         let result = '';
-
+        // 当读到客户端提交过来的数据时会触发data事件，然后调用回调函数
         req.on('data', (data) => {
             result += data;
         } );
 
         req.on('end', (data) => {
+            // 把查询字符串转成对象
             let obj = querystring.parse(result);
             console.log(obj);
+            // 发送响应
             res.end('ok');
         })
     }
