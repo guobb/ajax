@@ -2,11 +2,13 @@
  * Created by apple on 17/2/18.
  */
 // 引入核心模块
-import http from 'http';
+const http = require('http');
 // 应用URL解析URL参数
-import url from 'url';
+const url = require('url');
 // 读写文件
-import fs from 'fs';
+const fs = require('fs');
+
+const querystring = require('querystring');
 // 创建http服务器
 http.createServer((req,res) => {
     // 一定是个对象
@@ -18,7 +20,7 @@ http.createServer((req,res) => {
     let pathname = urlObj.pathname;
 
     if (pathname == '/') {
-        fs.readFile('./index.html', utf8, (err, data) => {
+        fs.readFile('./index.html', 'utf8', (err, data) => {
             res.end(data);
         })
     } else if (pathname == '/reg') {
@@ -29,10 +31,12 @@ http.createServer((req,res) => {
         } );
 
         req.on('end', (data) => {
-
+            let obj = querystring.parse(result);
+            console.log(obj);
+            res.end('ok');
         })
     }
 
 
 
-});
+}).listen(8080);
