@@ -8,7 +8,13 @@ const url = require('url');
 // 读写文件
 const fs = require('fs');
 
+const formidable = require('formidable');
+
 const querystring = require('querystring');
+
+const util = require('util');
+
+const mime = require('mime');
 // 创建http服务器
 // 只有当提交form表单并且是get, 浏览器才会把表单进行序列化拼到URL后面
 http.createServer((req,res) => {
@@ -49,6 +55,38 @@ http.createServer((req,res) => {
             // 发送响应
             res.end('ok');
         })
+    } else if (pathname == '/reg2') {
+        // 构建一个解析器
+        let form = new formidable.IncomingForm();
+        /**
+         *  用解析器解析请求体
+         *  把非file的input放在fileds里
+         *  把文件类型的元素放在files里
+         */
+        form.parse(req, function(err, fields, files) {
+
+            fs.readFile(files.avatar.path, (err, data) => {
+                let filename = '/images/'+ files.avatar.name;
+                fs.writeFile('.'+filename, data,(err) => {
+                    res.writeHead(200, {'content-type': 'text/plain'});
+                    res.end(filename);
+
+                })
+            });
+        });
+    } else {
+        fs.exists('.'+pathname, (exists) => {
+            if (exists) {
+                // 从文件名中获取文件的Content-Type
+                res.setHeader('Content-Type', mime.lookup(pathhame));
+                fs.readFile('.'+pathname, (err, data) => {
+                    res.end(data);
+                })
+            } else {
+                res.statusCode = 404;
+                res.end('404');
+            }
+        } )
     }
 
 
